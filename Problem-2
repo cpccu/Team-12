@@ -1,0 +1,239 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+
+using namespace std;
+
+struct Question {
+    string question;
+    vector<string> options;
+    int correctAnswer;
+};
+
+void askQuestion(const Question &ques, int &score) {
+    cout << ques.question << endl;
+    for (int i = 0; i < ques.options.size(); ++i) {
+        cout << i + 1 << ". " << ques.options[i] << endl;
+    }
+    cout << "Your answer (1-4): ";
+    int answer;
+    cin >> answer;
+    if (answer == ques.correctAnswer) {
+        score += 10;
+        cout << "Correct!" << endl;
+    } else {
+        score -= 3;
+        cout << "Incorrect!" << endl;
+    }
+    cout << "Current score: " << score << endl << endl;
+}
+
+int playGame(const vector<Question> &questions) {
+    int score = 0;
+    int totalQuestions = 10; 
+
+    for (int i = 0; i < totalQuestions; ++i) {
+        int randomIndex = rand() % questions.size();
+        askQuestion(questions[randomIndex], score);
+    }
+
+    cout << "Final score: " << score << endl;
+    return score;
+}
+
+void showInstructions() {
+    cout << "Instructions:" << endl;
+    cout << "1. You will be asked a series of questions." << endl;
+    cout << "2. Each question will have four options." << endl;
+    cout << "3. Enter the number corresponding to your answer." << endl;
+    cout << "4. For each correct answer, you will receive 10 points." << endl;
+    cout << "5. For each incorrect answer, 3 points will be deducted." << endl;
+    cout << "6. Your final score will be displayed at the end." << endl << endl;
+}
+
+void showBestScores(const vector<int> &scores) {
+    if (scores.empty()) {
+        cout << "No scores to display yet." << endl;
+        return;
+    }
+
+    vector<int> bestScores = scores;
+    sort(bestScores.begin(), bestScores.end(), greater<int>());
+    cout << "Best scores:" << endl;
+
+    for (int i = 0; i < min(3, (int)bestScores.size()); ++i) {
+        cout << i + 1 << ". " << bestScores[i] << endl;
+    }
+    cout << endl;
+}
+
+vector<Question> generateEasyQuestions() {
+    vector<Question> easyQuestions = {
+        {"What is 2 + 2?", {"3", "4", "5", "6"}, 2},
+        {"What is the capital of France?", {"Paris", "London", "Berlin", "Madrid"}, 1},
+        {"Who wrote 'Harry Potter' series?", {"George Orwell", "Aldous Huxley", "J.K. Rowling", "Jane Austen"}, 3},
+        {"What is the chemical symbol for water?", {"H2O", "CO2", "NaCl", "O2"}, 1},
+        {"What is the largest planet in our Solar System?", {"Earth", "Mars", "Jupiter", "Saturn"}, 3},
+        {"Which country is famous for tulips?", {"Netherlands", "Italy", "France", "Japan"}, 1},
+        {"Who is known as the 'Father of Computers'?", {"Alan Turing", "Charles Babbage", "Ada Lovelace", "John von Neumann"}, 2},
+        {"Which animal is known as the 'King of the Jungle'?", {"Tiger", "Lion", "Leopard", "Cheetah"}, 2},
+        {"What is the largest mammal on Earth?", {"Elephant", "Blue Whale", "Giraffe", "Hippo"}, 2},
+        {"Who painted the Mona Lisa?", {"Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"}, 3},
+        {"What is the currency of Japan?", {"Yen", "Dollar", "Euro", "Pound"}, 1},
+        {"Which planet is known as the Red Planet?", {"Mars", "Jupiter", "Saturn", "Neptune"}, 1},
+        {"Who invented the telephone?", {"Alexander Graham Bell", "Thomas Edison", "Nikola Tesla", "Albert Einstein"}, 1},
+        {"Which is the largest ocean on Earth?", {"Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"}, 3},
+        {"What is the capital of Australia?", {"Sydney", "Melbourne", "Canberra", "Brisbane"}, 3},
+        {"Who wrote 'Romeo and Juliet'?", {"William Shakespeare", "Charles Dickens", "Jane Austen", "Emily Brontë"}, 1},
+        {"Which animal is known as the 'Ship of the Desert'?", {"Camel", "Horse", "Elephant", "Zebra"}, 1},
+        {"What is the national flower of India?", {"Rose", "Lotus", "Sunflower", "Jasmine"}, 2},
+        {"Who discovered penicillin?", {"Alexander Fleming", "Louis Pasteur", "Marie Curie", "Gregor Mendel"}, 1},
+        {"Which is the longest river in the world?", {"Amazon River", "Nile River", "Yangtze River", "Mississippi River"}, 2},
+        {"What is the smallest country in the world?", {"Monaco", "Vatican City", "Liechtenstein", "Maldives"}, 2},
+        {"Who wrote 'Pride and Prejudice'?", {"Emily Brontë", "Jane Austen", "Charles Dickens", "Leo Tolstoy"}, 2},
+        {"Which is the largest bird in the world?", {"Ostrich", "Emu", "Albatross", "Eagle"}, 1},
+        {"What is the chemical formula for table salt?", {"NaCl", "H2O", "CO2", "O2"}, 1},
+        {"Who is the CEO of Tesla Motors?", {"Bill Gates", "Elon Musk", "Mark Zuckerberg", "Jeff Bezos"}, 2},
+        {"Which is the largest continent by land area?", {"Asia", "Africa", "North America", "Europe"}, 1},
+        {"What is the world's most widely spoken language?", {"English", "Spanish", "Chinese", "Hindi"}, 3},
+        {"Who developed the theory of relativity?", {"Isaac Newton", "Albert Einstein", "Galileo Galilei", "Stephen Hawking"}, 2},
+        {"What is the capital of Brazil?", {"São Paulo", "Brasília", "Rio de Janeiro", "Salvador"}, 2},
+        {"What is the largest species of big cat?", {"Lion", "Tiger", "Leopard", "Jaguar"}, 2},
+        {"What is the chemical formula for methane?", {"CH4", "H2O", "CO2", "O2"}, 1},
+        {"Who founded Microsoft?", {"Steve Jobs", "Bill Gates", "Jeff Bezos", "Larry Page"}, 2}
+    };
+    return easyQuestions;
+}
+
+vector<Question> generateMediumQuestions() {
+    vector<Question> mediumQuestions = {
+        {"Which language is known as the mother of all programming languages?", {"C", "Java", "Python", "Assembly"}, 1},
+        {"Which company developed the C++ language?", {"Microsoft", "Apple", "Bell Labs", "IBM"}, 3},
+        {"What is the use of the 'break' statement in C++?", {"To terminate a program", "To exit a loop", "To skip an iteration", "To jump to a label"}, 2},
+        {"What is polymorphism in C++?", {"Ability to take many forms", "Ability to change forms", "Ability to multiply forms", "Ability to divide forms"}, 1},
+        {"Which operator is used to access members of a structure?", {". (dot)", "-> (arrow)", ":: (scope resolution)", "* (pointer)"}, 1},
+        {"What does the keyword 'static' mean in C++?", {"Something that doesn't change", "Class-level scope", "Memory allocation", "Variable declaration"}, 2},
+        {"Which data structure uses LIFO?", {"Queue", "Stack", "Tree", "Heap"}, 2},
+        {"What does IDE stand for?", {"Integrated Development Environment", "Interactive Development Environment", "Integrated Design Environment", "Interactive Design Environment"}, 1},
+        {"Which programming language is widely used for artificial intelligence?", {"Java", "Python", "C++", "Ruby"}, 2},
+        {"What is the full form of HTTP?", {"Hypertext Transfer Protocol", "Hypertext Transmission Protocol", "Hypertext Tool Protocol", "Hypertext Terminal Protocol"}, 1},
+        {"What does the acronym SQL stand for?", {"Structured Query Language", "Sequential Query Language", "Standard Query Language", "Single Query Language"}, 1},
+        {"Which programming language is commonly used for web development?", {"C", "Java", "Python", "JavaScript"}, 4},
+        {"What is the purpose of the 'super' keyword in Java?", {"To call the superclass constructor", "To access superclass methods", "To refer to the current object", "To handle exceptions"}, 2},
+        {"What is a 'lambda' function in programming?", {"A function with no name", "A function that takes no arguments", "An anonymous function", "A function with variable arguments"}, 3},
+        {"What is the purpose of the 'finally' block in Java?", {"To define a block of code that always executes", "To handle exceptions", "To perform cleanup actions", "To override superclass methods"}, 1},
+        {"What is the difference between '==' and '.equals()' in Java?", {"They are the same", "'==' compares object references, '.equals()' compares object contents", "'.equals()' is for primitive types, '==' is for objects", "'==' is for strings, '.equals()' is for integers"}, 2},
+        {"What is an 'abstract class' in Java?", {"A class with abstract methods that must be implemented by subclasses", "A class that cannot be instantiated", "A class that is only partially implemented", "A class that cannot be extended"}, 1},
+        {"What does OOP stand for?", {"Object-Oriented Programming", "Object-Oriented Protocol", "Object-Oriented Process", "Object-Oriented Practice"}, 1},
+        {"What is the purpose of a constructor in Java?", {"To create objects", "To define class variables", "To handle exceptions", "To initialize object state"}, 4},
+        {"What is the main advantage of inheritance in object-oriented programming?", {"Code reuse", "Enhanced security", "Faster execution", "Simpler syntax"}, 1},
+        {"What is the purpose of the 'break' statement in Java?", {"To terminate a loop", "To exit a method", "To jump to a label", "To skip an iteration"}, 1},
+        {"What is the purpose of the 'extends' keyword in Java?", {"To implement interfaces", "To create objects", "To define class variables", "To indicate inheritance"}, 4},
+        {"Which data structure uses FIFO?", {"Stack", "Queue", "Tree", "Heap"}, 2},
+        {"What is the difference between 'ArrayList' and 'LinkedList' in Java?", {"'ArrayList' is faster for inserting elements, 'LinkedList' is faster for accessing elements", "'ArrayList' allows duplicate elements, 'LinkedList' does not", "'ArrayList' uses more memory than 'LinkedList'", "'LinkedList' is synchronized, 'ArrayList' is not"}, 1},
+        {"What is the purpose of the 'throw' statement in Java?", {"To create custom exceptions", "To handle exceptions", "To throw checked exceptions", "To terminate a program"}, 1},
+        {"What is the purpose of the 'static' keyword in Java?", {"To define class variables and methods", "To allocate memory dynamically", "To handle runtime errors", "To define constants"}, 1},
+        {"What does JVM stand for in Java?", {"Java Virtual Machine", "Java Visual Machine", "Java Variable Machine", "Java Virtual Memory"}, 1}
+    };
+    return mediumQuestions;
+}
+
+vector<Question> generateHardQuestions() {
+    vector<Question> hardQuestions = {
+        {"What is the time complexity of binary search?", {"O(n)", "O(n^2)", "O(log n)", "O(1)"}, 3},
+        {"Which sorting algorithm has the best average-case time complexity?", {"Bubble Sort", "Quick Sort", "Merge Sort", "Insertion Sort"}, 2},
+        {"What does the keyword 'virtual' indicate in C++?", {"A variable that is not real", "A function that can be overridden", "A class that cannot be instantiated", "A reference to another class"}, 2},
+        {"What is the default access specifier for members of a class in C++?", {"public", "private", "protected", "none"}, 1},
+        {"What does the keyword 'new' do in C++?", {"Creates a new variable", "Allocates memory dynamically", "Deletes a variable", "Checks the type of a variable"}, 2},
+        {"What is the output of 'cout << (3 > 2 ? 1 : 0)'?", {"1", "0", "true", "false"}, 1},
+        {"Which operator is used to allocate memory in C++?", {"new", "malloc", "allocate", "create"}, 1},
+        {"What does MVC stand for in software architecture?", {"Model View Controller", "Most Valuable Code", "Main View Controller", "Modern View Code"}, 1},
+        {"Which design pattern ensures a single instance of a class?", {"Factory Pattern", "Singleton Pattern", "Observer Pattern", "Adapter Pattern"}, 2},
+        {"What is the purpose of the 'this' pointer in C++?", {"To access class members", "To access static members", "To access global members", "To access derived class members"}, 1},
+        {"What is the difference between 'DELETE' and 'DROP' commands in SQL?", {"'DELETE' removes rows from a table, 'DROP' deletes entire table structure", "'DELETE' deletes entire table structure, 'DROP' removes rows from a table", "'DELETE' is used for deleting databases, 'DROP' is used for deleting tables", "'DELETE' removes data permanently, 'DROP' is reversible"}, 1},
+        {"What is the purpose of the 'JOIN' clause in SQL?", {"To combine rows from two or more tables", "To delete rows from a table", "To update rows in a table", "To select rows from a table"}, 1},
+        {"What does ACID stand for in database transactions?", {"Atomicity, Consistency, Isolation, Durability", "Aggregate, Collection, Index, Database", "Association, Category, Index, Definition", "Algorithm, Condition, Instruction, Definition"}, 1},
+        {"What is the primary key in a database table?", {"A unique identifier for a row", "A unique identifier for a column", "An index on the table", "A foreign key from another table"}, 1},
+        {"What is normalization in database design?", {"Organizing data to minimize redundancy", "Optimizing queries for faster execution", "Encrypting data for security", "Combining multiple databases into one"}, 1},
+        {"Which SQL command is used to add data to a table?", {"ADD", "CREATE", "INSERT", "UPDATE"}, 3},
+        {"What is a 'view' in SQL?", {"A virtual table based on the result-set of a SELECT statement", "An index for faster data retrieval", "A temporary table", "A backup copy of a table"}, 1},
+        {"What is the purpose of an index in a database?", {"To enforce referential integrity", "To allow faster data retrieval", "To secure the database", "To store large binary objects"}, 2},
+        {"What does DDL stand for in SQL?", {"Data Definition Language", "Data Description Language", "Data Deletion Language", "Data Declaration Language"}, 1},
+        {"What is the difference between primary key and foreign key?", {"Primary key uniquely identifies a record in a table, foreign key refers to a primary key in another table", "Foreign key uniquely identifies a record in a table, primary key refers to a foreign key in another table", "Primary key allows NULL values, foreign key does not", "Foreign key allows NULL values, primary key does not"}, 1},
+        {"What is a stored procedure in SQL?", {"A set of SQL statements stored in the database and executed as a single unit", "A temporary table created during a session", "An index for optimizing queries", "A view based on the result-set of a SELECT statement"}, 1},
+        {"What does 'UNION' do in SQL?", {"Combines the result-set of two or more SELECT statements", "Removes duplicate rows from the result-set", "Performs an intersection of two or more tables", "Performs a difference operation between two or more tables"}, 1},
+        {"What is the purpose of the 'HAVING' clause in SQL?", {"To filter rows after grouping", "To filter rows before grouping", "To join tables based on a condition", "To update rows in a table"}, 1},
+        {"What does 'ROLLBACK' do in SQL?", {"Reverts any changes made by the current transaction", "Commits the current transaction", "Deletes rows from a table", "Performs a union of two or more tables"}, 1},
+        {"What is the purpose of 'CASCADE' in SQL?", {"To update rows in a table based on a condition", "To delete rows from a table and corresponding rows in related tables", "To insert rows into a table based on a condition", "To retrieve rows from a table"}, 2},
+        {"What is a trigger in SQL?", {"A set of SQL statements executed in response to certain events", "An index for optimizing data retrieval", "A temporary table", "A view based on the result-set of a SELECT statement"}, 1},
+        {"What is the purpose of 'GROUP BY' in SQL?", {"To group rows that have the same values into summary rows", "To join tables based on a condition", "To filter rows after grouping", "To update rows in a table"}, 1},
+        {"What is the purpose of 'NULL' in SQL?", {"To represent missing or unknown data", "To enforce unique constraints", "To limit the number of rows returned", "To store large binary objects"}, 1}
+    };
+    return hardQuestions;
+}
+
+int main() {
+    srand(static_cast<unsigned int>(time(0))); 
+
+    string name;
+    cout << "Enter your name: ";
+    getline(cin, name);
+
+    cout << "Hello, " << name << "! Hope it's going well." << endl;
+
+    int choice;
+    vector<int> scores;
+    do {
+        cout << "Enter options: "<< '\n';
+        cout << "1. Play Game" << '\n' << "2. Instructions" << '\n' << "3. Exit" << '\n' << "4. Best Scores" << '\n';
+        cout << "Your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                int difficulty;
+                cout << "Choose difficulty level:" << endl;
+                cout << "1. Easy" << endl;
+                cout << "2. Medium" << endl;
+                cout << "3. Hard" << endl;
+                cout << "Enter your choice: ";
+                cin >> difficulty;
+
+                vector<Question> questions;
+                switch (difficulty) {
+                    case 1:
+                        questions = generateEasyQuestions();
+                        break;
+                    case 2:
+                        questions = generateMediumQuestions();
+                        break;
+                    case 3:
+                        questions = generateHardQuestions();
+                        break;
+                    default:
+                        cout << "Invalid choice. Please try again." << endl;
+                        continue;
+                }
+
+                int score = playGame(questions);
+                scores.push_back(score);
+                break;
+            }
+            case 2:
+                showInstructions();
+                break;
+            case 3:
+                cout << "Goodbye, " << name << "!" << endl;
+                break;
+            case 4:
+                showBestScores(scores);
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    } while (choice != 3);
+
+    return 0;
+}
